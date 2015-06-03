@@ -1,5 +1,6 @@
 suppressPackageStartupMessages(library(data.table))
 suppressPackageStartupMessages(library(dplyr))
+suppressPackageStartupMessages(library(lubridate))
 
 ########################################################################################
 # this example is extracted from StackOverflow:
@@ -42,5 +43,6 @@ clean_data <- full_data[data_good]
 clean_data <- clean_data %>%
               mutate(Date = as.Date(Date, format = "%d/%m/%Y")) %>% # mutate date format
               filter(Date >= "2007-02-01" & Date <= "2007-02-02" ) %>% # filter 2 days only
-              mutate_each(funs(as.numeric), -c(Date,Time))  # to mumeric all, less Date & Time
-
+              mutate_each(funs(as.numeric), -c(Date,Time)) %>% # to mumeric all, less Date & Time
+              mutate(DateTime = ymd_hms(paste(Date,Time))) %>% # Create a new column with Date 6 Time together
+              mutate(WeekDay = wday(Date, label = TRUE))
