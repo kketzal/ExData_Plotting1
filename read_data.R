@@ -25,24 +25,32 @@ setAs("character","myDate", function(from) as.Date(from, format="%d/%m/%Y") )
 #                  sql = "SELECT * FROM file WHERE Date BETWEEN date('2007-02-01') AND date('2007-02-02')")
 
 
-## Check if data file exists
+## Check if data file exists, if not, STOP the script execution.
 if(!file.exists("household_power_consumption.txt")){
     stop("the file 'household_power_consumption.txt' doesn't exist!")
 }
 
-    
+
+# Read full dataset
 full_data <- fread("household_power_consumption.txt", 
                    na.strings = c('?'), 
                    sep = ";", 
                    header = TRUE, 
                    colClasses = c("character","character","character","character","character","character","character","character","character"))
     
-
+# Clean de dataset. Removing NA values.
 data_good <- complete.cases(full_data)
 clean_data <- full_data[data_good]
+
+# Delete unnecessary datasets
+rm(full_data)
+rm(data_good)
+
 clean_data <- clean_data %>%
-              mutate(Date = as.Date(Date, format = "%d/%m/%Y")) %>% # mutate date format
-              filter(Date >= "2007-02-01" & Date <= "2007-02-02" ) %>% # filter 2 days only
-              mutate_each(funs(as.numeric), -c(Date,Time)) %>% # to mumeric all, less Date & Time
-              mutate(DateTime = ymd_hms(paste(Date,Time))) %>% # Create a new column with Date 6 Time together
-              mutate(WeekDay = wday(Date, label = TRUE))
+              mutate(Date = as.Date(Date, format = "%d/%m/%Y")) %>%     # mutate date format, for filtering purpouses
+              filter(Date >= "2007-02-01" & Date <= "2007-02-02" ) %>%  # filter 2 days only
+              mutate_each(funs(as.numeric), -c(Date,Time)) %>%          # to mumeric all, less Date & Time
+              mutate(DateTime = ymd_hms(paste(Date,Time))) %>%          # Create a new column with Date 6 Time together
+              mutate(WeekDay = lubridate::wday(Date, label = TRUE))     # Create a factor with week day:
+                                                                        #   data.table has a 'wday' function, so we need to specify the exact package 'lubridate'.
+
