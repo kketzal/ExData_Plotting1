@@ -15,14 +15,13 @@ setAs("character","myDate", function(from) as.Date(from, format="%d/%m/%Y") )
 # Similar to Time:
 # setClass("myTime")
 # setAs("character","myTime", function(from) hms(from) )
-########################################################################################
-
 #
 #x <- read.csv.sql("household_power_consumption.txt", 
 #                  sep = ";", 
 #                  nrows = 10,
 #                  colClasses = c("myDate","character","numeric","numeric","numeric","numeric","numeric","numeric","numeric"), 
 #                  sql = "SELECT * FROM file WHERE Date BETWEEN date('2007-02-01') AND date('2007-02-02')")
+########################################################################################
 
 
 ## Check if data file exists, if not, STOP the script execution.
@@ -50,7 +49,5 @@ clean_data <- clean_data %>%
               mutate(Date = as.Date(Date, format = "%d/%m/%Y")) %>%     # mutate date format, for filtering purpouses
               filter(Date >= "2007-02-01" & Date <= "2007-02-02" ) %>%  # filter 2 days only
               mutate_each(funs(as.numeric), -c(Date,Time)) %>%          # to mumeric all, less Date & Time
-              mutate(DateTime = ymd_hms(paste(Date,Time))) %>%          # Create a new column with Date 6 Time together
-              mutate(WeekDay = lubridate::wday(Date, label = TRUE))     # Create a factor with week day:
-                                                                        #   data.table has a 'wday' function, so we need to specify the exact package 'lubridate'.
-
+              mutate(DateTime = ymd_hms(paste(Date,Time)))              # Create a new column with Date & Time together
+             
