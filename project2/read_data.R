@@ -12,7 +12,7 @@ if(!match(data_source_classif_file, dir(), nomatch = FALSE))
 
 # read the data
 message(paste("Reading", data_pm25_file, "...", collapse = ""))
-data_pm25 <- readRDS(data_pm25_file)
+NEI <- readRDS(data_pm25_file)
 message(paste("Reading", data_source_classif_file, "..."))
-data_source_classif <- readRDS(data_source_classif_file)
+SCC <- readRDS(data_source_classif_file)
 message("Done!")
