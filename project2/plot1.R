@@ -10,7 +10,8 @@ grouped_by_year <- summarise(group_by(NEI, year), Total_Emissions = sum(Emission
 # Plot the result
 png("plot1.png")
 
-plot(grouped_by_year$year, grouped_by_year$Total_Emissions,      
+plot(grouped_by_year$year, grouped_by_year$Total_Emissions,
+     main = "Total PM25 Emissions in United States",
      xlab = "Year",
      ylab = "Total Emissions (tons)",
      type = "l")
