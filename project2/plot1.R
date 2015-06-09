@@ -2,7 +2,7 @@
 source("read_data.R")
 
 # load library "dplyr" for "group" and "summarise" purpouses
-library(dplyr)
+suppressPackageStartupMessages(library(dplyr))
 
 # group the dataframe (NEI )by year, and sum total emissions from all sources
 grouped_by_year <- summarise(group_by(NEI, year), Total_Emissions = sum(Emissions))
