@@ -2,7 +2,7 @@
 source("read_data.R")
 
 # load library "dplyr" for "group" and "summarise" purpouses
-library(dplyr)
+suppressPackageStartupMessages(library(dplyr))
 
 # Convert NEI dataframe in a dplyr package "tbl_df".
 NEI <- tbl_df(NEI)
