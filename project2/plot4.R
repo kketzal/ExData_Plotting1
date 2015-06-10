@@ -3,7 +3,6 @@ source("read_data.R")
 
 # load library "dplyr" for "group" and "summarise" purpouses
 suppressPackageStartupMessages(library(dplyr))
-suppressPackageStartupMessages(library(ggplot2))
 suppressPackageStartupMessages(library(data.table))
 
 ####################################################
