@@ -12,19 +12,18 @@ suppressPackageStartupMessages(library(data.table))
 NEI <- data.table(NEI)
 SCC <- data.table(SCC)
 
-# Getting the MOTOR VEHICLES rows from SCC, searching in "Sector" column. 
+# Getting the MOTOR VEHICLES rows from SCC, searching in "Data.Category" column. 
 # That's (excluding NON-ROAD values):
-# > grep("Non-Road", grep("Mobile", levels(SCC$EI.Sector), value = T), invert = T, value = T)
-# [1] "Mobile - Aircraft"                             "Mobile - Commercial Marine Vessels"           
-# [3] "Mobile - Locomotives"                          "Mobile - On-Road Diesel Heavy Duty Vehicles"  
-# [5] "Mobile - On-Road Diesel Light Duty Vehicles"   "Mobile - On-Road Gasoline Heavy Duty Vehicles"
-# [7] "Mobile - On-Road Gasoline Light Duty Vehicles"
+# > good <- grep("Onroad",SCC$Data.Category)
+# > on_road <- SCC[good,]
+# > levels(factor(on_road$EI.Sector))
+#  [1] "Mobile - On-Road Diesel Heavy Duty Vehicles"   "Mobile - On-Road Diesel Light Duty Vehicles"  
+#  [3] "Mobile - On-Road Gasoline Heavy Duty Vehicles" "Mobile - On-Road Gasoline Light Duty Vehicles"
 #
 
-motor_vehicles_rows <- grep("Non-Road", grep("Mobile", SCC$EI.Sector, value = T), invert = T, value = T)
-
-# Subsetting the SCC data, we only want "motor_vehicles" values...
-MOTOR_VEHICLES_DATA <- SCC[motor_vehicles_rows]
+# Subsetting the SCC data, we only want "Onroad" values...
+good <- grep("Onroad",SCC$Data.Category)
+MOTOR_VEHICLES_DATA <- SCC[good,]
 
 # Subsetting the NEI data, we only want "Baltimore" values...in other words "fips = 24518"
 BALTIMORE_DATA <- filter(NEI, fips == "24510")
@@ -33,24 +32,27 @@ BALTIMORE_DATA <- filter(NEI, fips == "24510")
 setkey(BALTIMORE_DATA, SCC)
 setkey(MOTOR_VEHICLES_DATA, SCC)  
 
-all_coal_data <- merge(NEI, COAL_DATA)
+all_data <- merge(BALTIMORE_DATA, MOTOR_VEHICLES_DATA)
 
 ####################################################
 
 
 # group the dataframe (baltimore_df) by year, and type
-grouped <- group_by(all_coal_data, year)
+grouped <- group_by(all_data, year)
 
 # Summarise grouped dataframe and sum 
 my_summarize <- summarise(grouped, Total_Emissions = sum(Emissions))
 
+# the my_summarize dataset appears not be sorted by year....we need to order it.
+my_summarize <- my_summarize[order(year)]
+
 # Plot
-png("plot4.png")
+png("plot5.png", width = 650)
 
 plot(my_summarize$year, my_summarize$Total_Emissions,
-     main = "Total COAL Combustion Emissions in United States",
+     main = "Motor Vehicle Sources Emissions from 1999–2008 in Baltimore City",
      xlab = "Year",
-     ylab = "Total Coal Emissions (tons)",
+     ylab = "Motor Vehicles Emissions (tons)",
      type = "l")
 
 dev.off()
