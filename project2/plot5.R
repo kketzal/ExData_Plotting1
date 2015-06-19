@@ -37,7 +37,7 @@ all_data <- merge(BALTIMORE_DATA, MOTOR_VEHICLES_DATA)
 ####################################################
 
 
-# group the dataframe (baltimore_df) by year, and type
+# group the dataframe (all_data) by year
 grouped <- group_by(all_data, year)
 
 # Summarise grouped dataframe and sum 

@@ -42,7 +42,7 @@ all_data <- merge(BALTIMORE_L.A._DATA, MOTOR_VEHICLES_DATA)
 ####################################################
 
 
-# group the dataframe (baltimore_df) by year, and type
+# group the dataframe (all_data) by year, and fips code
 grouped <- group_by(all_data, year, fips)
 
 # Summarise grouped dataframe and compute the SUM of emissions 

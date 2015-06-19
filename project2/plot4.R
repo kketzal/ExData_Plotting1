@@ -27,7 +27,7 @@ all_coal_data <- merge(NEI, COAL_DATA)
 ####################################################
 
 
-# group the dataframe (baltimore_df) by year, and type
+# group the dataframe (all_coal_data) by year, and type
 grouped <- group_by(all_coal_data, year)
 
 # Summarise grouped dataframe and sum 
